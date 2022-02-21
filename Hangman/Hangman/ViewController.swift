@@ -52,6 +52,29 @@ class ViewController: UIViewController {
         buttonContainer.translatesAutoresizingMaskIntoConstraints = false
         buttonContainer.backgroundColor = .darkGray
         view.addSubview(buttonContainer)
+        
+        NSLayoutConstraint.activate([
+            labelContainer.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
+            labelContainer.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+            labelContainer.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 30),
+            labelContainer.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1),
+            
+            buttonContainer.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -30),
+            buttonContainer.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 10),
+            buttonContainer.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: -10),
+            buttonContainer.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1),
+            
+            scoreLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scoreLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            usedLettersLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 10),
+            usedLettersLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+            usedLettersLabel.bottomAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: -10),
+            
+            hintLabel.topAnchor.constraint(equalTo: labelContainer.bottomAnchor, constant: 10),
+            hintLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 10),
+            hintLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: -10),
+        ])
     }
 
 
