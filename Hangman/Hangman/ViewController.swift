@@ -14,6 +14,8 @@ class ViewController: UIViewController {
     var usedLettersLabel: UILabel!
     var labelContainer: UIView!
     var buttonContainer: UIView!
+    let alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",""]
+    var buttonArray = [UIButton]()
     
     override func loadView() {
         super.loadView()
@@ -80,6 +82,25 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        startGame()
+        
+        var count = 0
+        let rowFrame = Int(buttonContainer.frame.size.width) / 10
+        let colFrame = Int(buttonContainer.frame.size.height) / 4
+        for row in 1...3 {
+            for col in 1...9 {
+                let button = UIButton(type: .system)
+                button.setTitleColor(.white, for: .normal)
+                button.translatesAutoresizingMaskIntoConstraints = true
+                button.setTitle(alphabet[count], for: .normal)
+                button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+                button.frame = CGRect(x: rowFrame * col, y: colFrame * row, width: 20, height: 20)
+                buttonArray.append(button)
+                buttonContainer.addSubview(button)
+                count += 1
+                button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+            }
+        }
     }
 
 
