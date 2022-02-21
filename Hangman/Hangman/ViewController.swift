@@ -16,6 +16,8 @@ class ViewController: UIViewController {
         
         title = "HangMan"
 
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "New Game", style: .plain, target: self, action: #selector(newGame))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Hint", style: .plain, target: self, action: #selector(showHint))
     }
 
 
