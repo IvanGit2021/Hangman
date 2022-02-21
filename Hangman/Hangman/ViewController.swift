@@ -162,6 +162,18 @@ class ViewController: UIViewController {
         selectedWordArray = []
     }
 
+    func checkWinner() {
+        var count = 0
+        for label in labelArray {
+            if label.text == "__" {
+                count += 1
+            }
+        }
+        if count == 0 {
+            scoreLabel.text = "Winner"
+            winner = true
+        }
+    }
 
 }
 
