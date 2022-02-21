@@ -174,6 +174,18 @@ class ViewController: UIViewController {
             winner = true
         }
     }
+    
+    @objc func newGame() {
+        for button in buttonArray {
+            button.isHidden = false
+        }
+        labelArray.forEach { label in
+            label.removeFromSuperview()
+        }
+        tries = 0
+        lettersPressed = []
+        startGame()
+    }
 
 }
 
