@@ -20,6 +20,8 @@ class ViewController: UIViewController {
     var lettersPressed = [String]()
     var winner = false
     var labelArray = [UILabel]()
+    let hangmanDataSource = HangmanDataSource()
+    var randomIndex = 0
     var tries = 0 {
         didSet {
             scoreLabel.text = "Tries: \(tries) out of 7"
@@ -110,6 +112,33 @@ class ViewController: UIViewController {
                 button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
             }
         }
+    }
+    
+    func startGame () {
+        hangmanDataSource.parseWords()
+        randomIndex = Int.random(in: 0...hangmanDataSource.words.count)
+        selectedWord = hangmanDataSource.words[randomIndex]
+        hangmanDataSource.word = selectedWord
+        hangmanDataSource.parseWordDefinition()
+        hintLabel.text = ""
+        winner = false
+        
+        let width = 70
+        let height = 30
+        let viewFrame = Int(labelContainer.frame.size.width) / (selectedWord.count + 1)
+        
+        for i in 1...Int(selectedWord.count) {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = true
+            label.text = "__"
+            label.tag = i
+            label.font = UIFont.systemFont(ofSize: 20)
+            label.frame = CGRect(x: viewFrame * i, y: height, width: width, height: height)
+            labelArray.append(label)
+            labelContainer.addSubview(label)
+        }
+        scoreLabel.text = ""
+        usedLettersLabel.text = "Used Letters: "
     }
     
     @objc func buttonPressed(sender: UIButton) {
