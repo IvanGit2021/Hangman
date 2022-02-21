@@ -14,6 +14,8 @@ class ViewController: UIViewController {
         view = UIView()
         view.backgroundColor = .white
         
+        title = "HangMan"
+
     }
 
 
