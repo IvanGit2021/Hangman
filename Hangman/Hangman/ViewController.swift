@@ -186,6 +186,15 @@ class ViewController: UIViewController {
         lettersPressed = []
         startGame()
     }
+    
+    @objc func showHint() {
+        let alert = UIAlertController(title: "Hint", message: "Do you want a hint to be shown ?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { [self, weak alert] alert in
+            self.hintLabel.text = self.hangmanDataSource.definition
+        }))
+        alert.addAction(UIAlertAction(title: "No", style: .destructive))
+        present(alert, animated: true)
+    }
 
 }
 
