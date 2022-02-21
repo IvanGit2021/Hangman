@@ -148,6 +148,19 @@ class ViewController: UIViewController {
             }
         }
     }
+    
+    func gameOver() {
+        scoreLabel.text = "Game Over"
+        
+        var selectedWordArray = Array(selectedWord)
+        for label in labelArray {
+            if label.text == "__" {
+                label.text = String(selectedWordArray[label.tag - 1])
+                label.textColor = .red
+            }
+        }
+        selectedWordArray = []
+    }
 
 
 }
