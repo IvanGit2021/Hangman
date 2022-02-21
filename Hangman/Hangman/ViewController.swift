@@ -16,6 +16,14 @@ class ViewController: UIViewController {
     var buttonContainer: UIView!
     let alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",""]
     var buttonArray = [UIButton]()
+    var selectedWord: String = ""
+    var lettersPressed = [String]()
+    var winner = false
+    var tries = 0 {
+        didSet {
+            scoreLabel.text = "Tries: \(tries) out of 7"
+        }
+    }
     
     override func loadView() {
         super.loadView()
@@ -100,6 +108,33 @@ class ViewController: UIViewController {
                 count += 1
                 button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
             }
+        }
+    }
+    
+    @objc func buttonPressed(sender: UIButton) {
+     
+        if tries == 7 {
+            gameOver()
+        } else if winner {
+            return
+        } else {
+            guard let letterPressed = sender.titleLabel?.text else { return }
+            var indexes = [Int]()
+            for (index, letter) in selectedWord.enumerated() {
+                if letterPressed.contains(letter) {
+                    indexes.append(index + 1)
+                }
+            }
+            if !indexes.isEmpty {
+                showLabelWhenRight(letterPressed, indexes)
+            } else {
+                tries += 1
+            }
+            sender.isHidden = true
+            lettersPressed.append(letterPressed)
+            usedLettersLabel.text = "Used Letters: " + lettersPressed.joined(separator: " ")
+        
+            checkWinner()
         }
     }
 
