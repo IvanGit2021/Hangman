@@ -19,6 +19,7 @@ class ViewController: UIViewController {
     var selectedWord: String = ""
     var lettersPressed = [String]()
     var winner = false
+    var labelArray = [UILabel]()
     var tries = 0 {
         didSet {
             scoreLabel.text = "Tries: \(tries) out of 7"
@@ -135,6 +136,16 @@ class ViewController: UIViewController {
             usedLettersLabel.text = "Used Letters: " + lettersPressed.joined(separator: " ")
         
             checkWinner()
+        }
+    }
+    
+    func showLabelWhenRight (_ letterPressed: String, _ indexes: [Int]) {
+        for label in labelArray {
+            for index in indexes {
+                if index == label.tag {
+                    label.text = letterPressed
+                }
+            }
         }
     }
 
