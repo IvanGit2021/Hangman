@@ -10,7 +10,7 @@ import UIKit
 class ViewController: UIViewController {
 
     var hangmanImage: UIImageView!
-    var hintLabel: UILabel!
+    var clueLabel: UILabel!
     var usedLettersLabel: UILabel!
     var labelContainer: UIView!
     var buttonContainer: UIView!
@@ -32,19 +32,23 @@ class ViewController: UIViewController {
     override func loadView() {
         super.loadView()
         view = UIView()
-        view.backgroundColor = .darkGray
+        view.backgroundColor = UIColor(patternImage: UIImage(named: "backgroundImage.jpg")!)
         
         title = "HangMan"
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "New Game", style: .plain, target: self, action: #selector(newGame))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Hint", style: .plain, target: self, action: #selector(showHint))
+        navigationItem.rightBarButtonItem?.tintColor = .white
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Clue", style: .plain, target: self, action: #selector(showClue))
+        navigationItem.leftBarButtonItem?.tintColor = .white
+
         
-        hintLabel = UILabel()
-        hintLabel.translatesAutoresizingMaskIntoConstraints = false
-        hintLabel.font = UIFont.systemFont(ofSize: 20)
-        hintLabel.textAlignment = .center
-        hintLabel.numberOfLines = 0
-        view.addSubview(hintLabel)
+        clueLabel = UILabel()
+        clueLabel.translatesAutoresizingMaskIntoConstraints = false
+        clueLabel.font = UIFont.systemFont(ofSize: 20)
+        clueLabel.textAlignment = .center
+        clueLabel.numberOfLines = 0
+        clueLabel.textColor = .white
+        view.addSubview(clueLabel)
         
         hangmanImage = UIImageView()
         hangmanImage.contentMode = UIView.ContentMode.scaleAspectFill
@@ -55,6 +59,7 @@ class ViewController: UIViewController {
         usedLettersLabel = UILabel()
         usedLettersLabel.translatesAutoresizingMaskIntoConstraints = false
         usedLettersLabel.font = UIFont.systemFont(ofSize: 15)
+        usedLettersLabel.textColor = .white
         view.addSubview(usedLettersLabel)
         
         labelContainer = UIView()
@@ -63,7 +68,6 @@ class ViewController: UIViewController {
         
         buttonContainer = UIView()
         buttonContainer.translatesAutoresizingMaskIntoConstraints = false
-        buttonContainer.backgroundColor = .darkGray
         view.addSubview(buttonContainer)
         
         NSLayoutConstraint.activate([
@@ -86,9 +90,9 @@ class ViewController: UIViewController {
             usedLettersLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
             usedLettersLabel.bottomAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: -10),
             
-            hintLabel.topAnchor.constraint(equalTo: labelContainer.bottomAnchor, constant: 10),
-            hintLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 10),
-            hintLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: -10),
+            clueLabel.topAnchor.constraint(equalTo: labelContainer.bottomAnchor, constant: 10),
+            clueLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 10),
+            clueLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: -10),
         ])
     }
     
@@ -123,7 +127,7 @@ class ViewController: UIViewController {
         hangmanDataSource.word = selectedWord
         hangmanDataSource.parseWordDefinition()
         selectedWordArray = Array(selectedWord)
-        hintLabel.text = ""
+        clueLabel.text = ""
         winner = false
         
         let width = 70
@@ -136,6 +140,7 @@ class ViewController: UIViewController {
             label.text = "__"
             label.tag = i
             label.font = UIFont.systemFont(ofSize: 20)
+            label.textColor = .white
             label.frame = CGRect(x: viewFrame * i, y: height, width: width, height: height)
             labelArray.append(label)
             labelContainer.addSubview(label)
