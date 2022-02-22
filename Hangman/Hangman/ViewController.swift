@@ -22,6 +22,7 @@ class ViewController: UIViewController {
     var labelArray = [UILabel]()
     let hangmanDataSource = HangmanDataSource()
     var randomIndex = 0
+    var selectedWordArray = [String.Element]()
     var tries = 0 {
         didSet {
             scoreLabel.text = "Tries: \(tries) out of 7"
@@ -120,6 +121,7 @@ class ViewController: UIViewController {
         selectedWord = hangmanDataSource.words[randomIndex]
         hangmanDataSource.word = selectedWord
         hangmanDataSource.parseWordDefinition()
+        selectedWordArray = Array(selectedWord)
         hintLabel.text = ""
         winner = false
         
@@ -142,29 +144,31 @@ class ViewController: UIViewController {
     }
     
     @objc func buttonPressed(sender: UIButton) {
-     
-        if tries == 7 {
-            gameOver()
-        } else if winner {
-            return
-        } else {
-            guard let letterPressed = sender.titleLabel?.text else { return }
-            var indexes = [Int]()
-            for (index, letter) in selectedWord.enumerated() {
-                if letterPressed.contains(letter) {
-                    indexes.append(index + 1)
-                }
-            }
-            if !indexes.isEmpty {
-                showLabelWhenRight(letterPressed, indexes)
+        if let letterChosen = (sender.titleLabel?.text) {
+            if tries == 6 && !selectedWordArray.contains(String.Element(letterChosen)){
+                gameOver()
+                
+            } else if winner {
+                return
             } else {
-                tries += 1
+                guard let letterPressed = sender.titleLabel?.text else { return }
+                var indexes = [Int]()
+                for (index, letter) in selectedWord.enumerated() {
+                    if letterPressed.contains(letter) {
+                        indexes.append(index + 1)
+                    }
+                }
+                if !indexes.isEmpty {
+                    showLabelWhenRight(letterPressed, indexes)
+                } else {
+                    tries += 1
+                }
+                sender.isHidden = true
+                lettersPressed.append(letterPressed)
+                usedLettersLabel.text = "Used Letters: " + lettersPressed.joined(separator: " ")
+                
+                checkWinner()
             }
-            sender.isHidden = true
-            lettersPressed.append(letterPressed)
-            usedLettersLabel.text = "Used Letters: " + lettersPressed.joined(separator: " ")
-        
-            checkWinner()
         }
     }
     
@@ -181,7 +185,6 @@ class ViewController: UIViewController {
     func gameOver() {
         scoreLabel.text = "Game Over"
         
-        var selectedWordArray = Array(selectedWord)
         for label in labelArray {
             if label.text == "__" {
                 label.text = String(selectedWordArray[label.tag - 1])
