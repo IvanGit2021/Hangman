@@ -203,6 +203,7 @@ class ViewController: UIViewController {
         }
         if count == 0 {
             winner = true
+            showWinAlert()
         }
     }
     
@@ -218,10 +219,26 @@ class ViewController: UIViewController {
         startGame()
     }
     
-    @objc func showHint() {
-        let alert = UIAlertController(title: "Hint", message: "Do you want a hint to be shown ?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { [self, weak alert] alert in
-            self.hintLabel.text = self.hangmanDataSource.definition
+    @objc func showClue() {
+        if clueLabel.text == "" {
+            let alert = UIAlertController(title: "Clue", message: "Do you want a clue to be shown ? It will cost you one life", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { [self, weak alert] alert in
+                self.clueLabel.text = self.hangmanDataSource.definition
+                tries += 1
+            }))
+            alert.addAction(UIAlertAction(title: "No", style: .destructive))
+            present(alert, animated: true)
+        } else {
+            let alert2 = UIAlertController(title: nil, message: "The clue is already on screen", preferredStyle: .alert)
+            alert2.addAction(UIAlertAction(title: "Ok", style: .default))
+            present(alert2, animated: true)
+        }
+    }
+    
+    func showWinAlert() {
+        let alert = UIAlertController(title: "You're alive !!!", message: "Want to play again ?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+            self.newGame()
         }))
         alert.addAction(UIAlertAction(title: "No", style: .destructive))
         present(alert, animated: true)
