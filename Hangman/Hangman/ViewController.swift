@@ -9,8 +9,8 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    var scoreLabel: UILabel!
-    var hintLabel: UILabel!
+    var hangmanImage: UIImageView!
+    var clueLabel: UILabel!
     var usedLettersLabel: UILabel!
     var labelContainer: UIView!
     var buttonContainer: UIView!
@@ -25,37 +25,41 @@ class ViewController: UIViewController {
     var selectedWordArray = [String.Element]()
     var tries = 0 {
         didSet {
-            scoreLabel.text = "Tries: \(tries) out of 7"
+            hangmanImage.image = UIImage(named: "hangman\(tries)")
         }
     }
     
     override func loadView() {
         super.loadView()
         view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(patternImage: UIImage(named: "backgroundImage.jpg")!)
         
         title = "HangMan"
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "New Game", style: .plain, target: self, action: #selector(newGame))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Hint", style: .plain, target: self, action: #selector(showHint))
+        navigationItem.rightBarButtonItem?.tintColor = .white
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Clue", style: .plain, target: self, action: #selector(showClue))
+        navigationItem.leftBarButtonItem?.tintColor = .white
+
         
-        hintLabel = UILabel()
-        hintLabel.translatesAutoresizingMaskIntoConstraints = false
-        hintLabel.font = UIFont.systemFont(ofSize: 20)
-        hintLabel.textAlignment = .center
-        hintLabel.numberOfLines = 0
-        view.addSubview(hintLabel)
+        clueLabel = UILabel()
+        clueLabel.translatesAutoresizingMaskIntoConstraints = false
+        clueLabel.font = UIFont.systemFont(ofSize: 20)
+        clueLabel.textAlignment = .center
+        clueLabel.numberOfLines = 0
+        clueLabel.textColor = .white
+        view.addSubview(clueLabel)
         
-        scoreLabel = UILabel()
-        scoreLabel.translatesAutoresizingMaskIntoConstraints = false
-        scoreLabel.font = UIFont.systemFont(ofSize: 30)
-        scoreLabel.textAlignment = .center
-        scoreLabel.shadowColor = .gray
-        view.addSubview(scoreLabel)
+        hangmanImage = UIImageView()
+        hangmanImage.contentMode = UIView.ContentMode.scaleAspectFill
+        hangmanImage.translatesAutoresizingMaskIntoConstraints = false
+        hangmanImage.image = UIImage(named: "hangman")
+        view.addSubview(hangmanImage)
         
         usedLettersLabel = UILabel()
         usedLettersLabel.translatesAutoresizingMaskIntoConstraints = false
         usedLettersLabel.font = UIFont.systemFont(ofSize: 15)
+        usedLettersLabel.textColor = .white
         view.addSubview(usedLettersLabel)
         
         labelContainer = UIView()
@@ -64,7 +68,6 @@ class ViewController: UIViewController {
         
         buttonContainer = UIView()
         buttonContainer.translatesAutoresizingMaskIntoConstraints = false
-        buttonContainer.backgroundColor = .darkGray
         view.addSubview(buttonContainer)
         
         NSLayoutConstraint.activate([
@@ -78,16 +81,18 @@ class ViewController: UIViewController {
             buttonContainer.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: -10),
             buttonContainer.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1),
             
-            scoreLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            scoreLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            hangmanImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            hangmanImage.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 50),
+            hangmanImage.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3),
+            hangmanImage.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.3),
             
             usedLettersLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 10),
             usedLettersLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
             usedLettersLabel.bottomAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: -10),
             
-            hintLabel.topAnchor.constraint(equalTo: labelContainer.bottomAnchor, constant: 10),
-            hintLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 10),
-            hintLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: -10),
+            clueLabel.topAnchor.constraint(equalTo: labelContainer.bottomAnchor, constant: 10),
+            clueLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 10),
+            clueLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: -10),
         ])
     }
     
@@ -122,7 +127,7 @@ class ViewController: UIViewController {
         hangmanDataSource.word = selectedWord
         hangmanDataSource.parseWordDefinition()
         selectedWordArray = Array(selectedWord)
-        hintLabel.text = ""
+        clueLabel.text = ""
         winner = false
         
         let width = 70
@@ -135,17 +140,18 @@ class ViewController: UIViewController {
             label.text = "__"
             label.tag = i
             label.font = UIFont.systemFont(ofSize: 20)
+            label.textColor = .white
             label.frame = CGRect(x: viewFrame * i, y: height, width: width, height: height)
             labelArray.append(label)
             labelContainer.addSubview(label)
         }
-        scoreLabel.text = ""
+        hangmanImage.image = UIImage(named: "hangman")
         usedLettersLabel.text = "Used Letters: "
     }
     
     @objc func buttonPressed(sender: UIButton) {
         if let letterChosen = (sender.titleLabel?.text) {
-            if tries == 6 && !selectedWordArray.contains(String.Element(letterChosen)){
+            if tries == 9 && !selectedWordArray.contains(String.Element(letterChosen)){
                 gameOver()
                 
             } else if winner {
@@ -183,8 +189,7 @@ class ViewController: UIViewController {
     }
     
     func gameOver() {
-        scoreLabel.text = "Game Over"
-        
+        hangmanImage.image = UIImage(named: "hangman10")
         for label in labelArray {
             if label.text == "__" {
                 label.text = String(selectedWordArray[label.tag - 1])
@@ -202,8 +207,8 @@ class ViewController: UIViewController {
             }
         }
         if count == 0 {
-            scoreLabel.text = "Winner"
             winner = true
+            showWinAlert()
         }
     }
     
@@ -219,10 +224,26 @@ class ViewController: UIViewController {
         startGame()
     }
     
-    @objc func showHint() {
-        let alert = UIAlertController(title: "Hint", message: "Do you want a hint to be shown ?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { [self, weak alert] alert in
-            self.hintLabel.text = self.hangmanDataSource.definition
+    @objc func showClue() {
+        if clueLabel.text == "" {
+            let alert = UIAlertController(title: "Clue", message: "Do you want a clue to be shown ? It will cost you one life", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { [self, weak alert] alert in
+                self.clueLabel.text = self.hangmanDataSource.definition
+                tries += 1
+            }))
+            alert.addAction(UIAlertAction(title: "No", style: .destructive))
+            present(alert, animated: true)
+        } else {
+            let alert2 = UIAlertController(title: nil, message: "The clue is already on screen", preferredStyle: .alert)
+            alert2.addAction(UIAlertAction(title: "Ok", style: .default))
+            present(alert2, animated: true)
+        }
+    }
+    
+    func showWinAlert() {
+        let alert = UIAlertController(title: "You're alive !!!", message: "Want to play again ?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+            self.newGame()
         }))
         alert.addAction(UIAlertAction(title: "No", style: .destructive))
         present(alert, animated: true)
