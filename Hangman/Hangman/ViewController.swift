@@ -9,7 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    var scoreLabel: UILabel!
+    var hangmanImage: UIImageView!
     var hintLabel: UILabel!
     var usedLettersLabel: UILabel!
     var labelContainer: UIView!
@@ -25,14 +25,14 @@ class ViewController: UIViewController {
     var selectedWordArray = [String.Element]()
     var tries = 0 {
         didSet {
-            scoreLabel.text = "Tries: \(tries) out of 7"
+            hangmanImage.image = UIImage(named: "hangman\(tries)")
         }
     }
     
     override func loadView() {
         super.loadView()
         view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .darkGray
         
         title = "HangMan"
 
@@ -46,12 +46,11 @@ class ViewController: UIViewController {
         hintLabel.numberOfLines = 0
         view.addSubview(hintLabel)
         
-        scoreLabel = UILabel()
-        scoreLabel.translatesAutoresizingMaskIntoConstraints = false
-        scoreLabel.font = UIFont.systemFont(ofSize: 30)
-        scoreLabel.textAlignment = .center
-        scoreLabel.shadowColor = .gray
-        view.addSubview(scoreLabel)
+        hangmanImage = UIImageView()
+        hangmanImage.contentMode = UIView.ContentMode.scaleAspectFill
+        hangmanImage.translatesAutoresizingMaskIntoConstraints = false
+        hangmanImage.image = UIImage(named: "hangman")
+        view.addSubview(hangmanImage)
         
         usedLettersLabel = UILabel()
         usedLettersLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -78,8 +77,10 @@ class ViewController: UIViewController {
             buttonContainer.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: -10),
             buttonContainer.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1),
             
-            scoreLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            scoreLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            hangmanImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            hangmanImage.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 50),
+            hangmanImage.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3),
+            hangmanImage.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.3),
             
             usedLettersLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 10),
             usedLettersLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
@@ -139,13 +140,13 @@ class ViewController: UIViewController {
             labelArray.append(label)
             labelContainer.addSubview(label)
         }
-        scoreLabel.text = ""
+        hangmanImage.image = UIImage(named: "hangman")
         usedLettersLabel.text = "Used Letters: "
     }
     
     @objc func buttonPressed(sender: UIButton) {
         if let letterChosen = (sender.titleLabel?.text) {
-            if tries == 6 && !selectedWordArray.contains(String.Element(letterChosen)){
+            if tries == 9 && !selectedWordArray.contains(String.Element(letterChosen)){
                 gameOver()
                 
             } else if winner {
@@ -183,8 +184,7 @@ class ViewController: UIViewController {
     }
     
     func gameOver() {
-        scoreLabel.text = "Game Over"
-        
+        hangmanImage.image = UIImage(named: "hangman10")
         for label in labelArray {
             if label.text == "__" {
                 label.text = String(selectedWordArray[label.tag - 1])
@@ -202,7 +202,6 @@ class ViewController: UIViewController {
             }
         }
         if count == 0 {
-            scoreLabel.text = "Winner"
             winner = true
         }
     }
