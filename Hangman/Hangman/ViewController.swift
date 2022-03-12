@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class GameViewController: UIViewController {
 
     var hangmanImage: UIImageView!
     var clueLabel: UILabel!
@@ -191,10 +191,18 @@ class ViewController: UIViewController {
     func gameOver() {
         hangmanImage.image = UIImage(named: "hangman10")
         for label in labelArray {
-            if label.text == "__" {
-                label.text = String(selectedWordArray[label.tag - 1])
-                label.textColor = .red
+            
+
+            
+                if label.text == "__" {
+                    label.transform = CGAffineTransform(translationX: 0, y: -100)
+                    label.text = String(self.selectedWordArray[label.tag - 1])
+                    label.textColor = .red
+                    UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseOut]) {
+                    label.transform = .identity
+                }
             }
+            
         }
         selectedWordArray = []
     }
